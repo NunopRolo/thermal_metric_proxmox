@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Get data from sensors command
+output=$(sensors)
+
+# Extract fan1 RPM
+fan1=$(echo "$output" | awk '/fan1:/ {print $2}')
+
+# Extract CPU temperature (first +XX.X°C line that has "CPU")
+cpu_temp=$(echo "$output" | awk '/CPU:/ {gsub(/\+|°C/, "", $2); print $2}')
+
+# Output as JSON
+echo "{\"fan\": $fan1, \"cpu\": $cpu_temp}"
